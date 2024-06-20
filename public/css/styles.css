@@ -1,0 +1,18 @@
+body {
+    padding-top: 56px;
+    background-color: #343a40;
+}
+
+h1, p, label, .btn {
+    color: #f8f9fa;
+}
+
+.container {
+    background-color: #495057;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.form-control {
+    margin-bottom: 10px;
+}
