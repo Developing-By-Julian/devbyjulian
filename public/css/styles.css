@@ -3,6 +3,11 @@ body {
     background-color: #343a40;
 }
 
+header {
+    background-color: #007bff;
+    color: #fff;
+}
+
 h1, p, label, .btn {
     color: #f8f9fa;
 }
@@ -15,4 +20,9 @@ h1, p, label, .btn {
 
 .form-control {
     margin-bottom: 10px;
+}
+
+footer {
+    background-color: #007bff;
+    color: #fff;
 }
