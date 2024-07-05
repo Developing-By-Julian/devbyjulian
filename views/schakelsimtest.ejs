@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gamepad Axis Test</title>
+    <style>
+        .axis {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gamepad Axis Test</h1>
+    <div id="status">Wachten op gamepad verbinding...</div>
+    <div id="axes"></div>
+    <script>
+        window.addEventListener("gamepadconnected", (event) => {
+    const gamepad = event.gamepad;
+    document.getElementById("status").textContent = `Gamepad verbonden: ${gamepad.id}`;
+
+    const axesContainer = document.getElementById("axes");
+    for (let i = 0; i < gamepad.axes.length; i++) {
+        const axisElement = document.createElement("div");
+        axisElement.className = "axis";
+        axisElement.id = `axis-${i}`;
+        axisElement.textContent = `As ${i}: 0`;
+        axesContainer.appendChild(axisElement);
+    }
+
+    function update() {
+        const gp = navigator.getGamepads()[1];
+        if (gp) {
+            for (let i = 0; i < gp.axes.length; i++) {
+                const axisValue = gp.axes[i].toFixed(2);
+                document.getElementById(`axis-${i}`).textContent = `As ${i}: ${axisValue}`;
+            }
+        }
+        requestAnimationFrame(update);
+    }
+    update();
+});
+
+window.addEventListener("gamepaddisconnected", (event) => {
+    document.getElementById("status").textContent = "Gamepad losgekoppeld";
+});
+
+    </script>
+</body>
+</html>

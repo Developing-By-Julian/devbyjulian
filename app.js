@@ -18,6 +18,9 @@ app.get('/', (req, res) => {
 app.get('/contact', (req, res) => {
     res.render('contact');
 });
+app.get('/projecten', (req, res) => {
+    res.render('projects');
+});
 
 app.post('/contact', (req, res) => {
     const { name, email, message } = req.body;
@@ -25,6 +28,12 @@ app.post('/contact', (req, res) => {
     res.send('Contact form submitted!');
 });
 
+app.get("/schakelsim", (req, res) => {
+res.render("schakelsim")
+})
+app.get("/schakelsimtest", (req, res) => {
+    res.render("schakelsimtest")
+    })
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });

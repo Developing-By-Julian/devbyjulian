@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schakel Trainer</title>
+    <style>
+        .status {
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Koppelings Trainer</h1>
+    <div class="status" id="gear-status">Versnelling: N</div>
+    <div class="status" id="speed-status">Snelheid: 0</div>
+    <div class="status" id="clutch-status">Koppeling: 0</div>
+    <div class="status" id="throttle-status">Gas: 0</div>
+    <div class="status" id="engine-status">Motor: Uit</div>
+    <div id="gamepad-status">Wachten op gamepad verbinding...</div>
+
+    <script>
+        let currentGear = "N";
+        let speed = 0;
+        let clutchValue = 0;
+        let throttleValue = 0;
+        let engineOn = false;
+        const maxSpeeds = { "1": 30, "2": 60, "3": 90, "4": 120, "5": 150 };
+        const gears = ["N", "1", "2", "3", "4", "5"];
+        let lastShiftTime = 0;
+        const shiftCooldown = 500; // 500ms cooldown between shifts
+        const slowShiftCooldown = 1000; // 1000ms cooldown between N and 1
+        let lastClutchValue = 0;
+        const clutchDropThreshold = 0.2; // Threshold for detecting a quick clutch release
+        const smoothClutchThreshold = 0.1; // Threshold for detecting a smooth clutch engagement
+
+        window.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                engineOn = true;
+                document.getElementById("engine-status").textContent = `Motor: Aan`;
+            }
+        });
+
+        window.addEventListener("gamepadconnected", (event) => {
+            console.log(navigator.getGamepads());
+            document.getElementById("gamepad-status").textContent = `Gamepad verbonden: ${navigator.getGamepads().length - 2} gamepads verbonden`;
+
+            function update() {
+                const gamepads = navigator.getGamepads();
+                const mainGamepad = gamepads[1];
+                const secondaryGamepad = gamepads[
+                3
+                ];
+
+                if (mainGamepad) {
+                    // Assuming the clutch and throttle pedal are on the same axis (axis 1)
+                    const pedalValue = mainGamepad.axes[1];
+
+                    // Separate clutch and throttle values
+                    clutchValue = pedalValue > 0 ? pedalValue : 0;
+                    throttleValue = pedalValue < 0 ? -pedalValue : 0;
+
+                    document.getElementById("clutch-status").textContent = `Koppeling: ${clutchValue.toFixed(2)}`;
+                    document.getElementById("throttle-status").textContent = `Gas: ${throttleValue.toFixed(2)}`;
+
+                    // Detect quick clutch release
+                    if (lastClutchValue - clutchValue > clutchDropThreshold && speed > 0) {
+                        engineOn = false;
+                        currentGear = "N"; // Shift to neutral
+                        document.getElementById("engine-status").textContent = `Motor: Uit`;
+                        document.getElementById("gear-status").textContent = `Versnelling: N`;
+                        speed = 0; // Set speed to 0 when engine turns off
+                        document.getElementById("speed-status").textContent = `Snelheid: ${speed.toFixed(2)}`;
+                    }
+
+                    lastClutchValue = clutchValue;
+                }
+
+                if (secondaryGamepad) {
+                    // Check if the joystick (axis 1) is pushed forward to 1 or backward to -1
+                    const joystickValue = secondaryGamepad.axes[1];
+                    const now = Date.now();
+
+                    const currentGearIndex = gears.indexOf(currentGear);
+                    const currentShiftCooldown = (currentGear === "N" || currentGear === "1") ? slowShiftCooldown : shiftCooldown;
+
+                    if (now - lastShiftTime > currentShiftCooldown) {
+                        console.log(joystickValue);
+                        if (joystickValue === 1 && currentGearIndex >= 0 && currentGearIndex < gears.length - 1) {
+                            if (currentGear === "N" && clutchValue < smoothClutchThreshold) {
+                                // Shift up from N to 1 with smooth clutch release
+                                console.log('N - 1');
+                                currentGear = gears[currentGearIndex + 1];
+                                document.getElementById("gear-status").textContent = `Versnelling: ${currentGear}`;
+                                lastShiftTime = now; // Update last shift time
+                            } else if (currentGear !== "N" && clutchValue > 0.9) {
+                                // Shift up for other gears with quick clutch engagement
+                                currentGear = gears[currentGearIndex + 1];
+                                document.getElementById("gear-status").textContent = `Versnelling: ${currentGear}`;
+                                lastShiftTime = now; // Update last shift time
+                            }
+                        } else if (joystickValue === -1 && currentGearIndex > 0 && clutchValue > 0.9) {
+                            // Shift down
+                            currentGear = gears[currentGearIndex - 1];
+                            document.getElementById("gear-status").textContent = `Versnelling: ${currentGear}`;
+                            lastShiftTime = now; // Update last shift time
+                        }
+                    }
+                }
+
+                // Logic for increasing speed based on throttle in the current gear
+                if (currentGear !== "N" && engineOn) {
+                    const maxSpeed = maxSpeeds[currentGear];
+                    speed += throttleValue * 0.1;  // Adjust the speed increment as needed
+                    if (speed > maxSpeed) speed = maxSpeed;
+                    document.getElementById("speed-status").textContent = `Snelheid: ${speed.toFixed(2)}`;
+
+                    // Logic for maintaining speed when clutch is engaged
+                    if (clutchValue > 0.9) {
+                        speed -= 0.5;  // Simulate deceleration
+                        if (speed < 0) speed = 0;
+                    }
+                } else {
+                    speed = 0;
+                    document.getElementById("speed-status").textContent = `Snelheid: ${speed.toFixed(2)}`;
+                }
+
+                requestAnimationFrame(update);
+            }
+
+            update();
+        });
+
+        window.addEventListener("gamepaddisconnected", (event) => {
+            document.getElementById("gamepad-status").textContent = "Gamepad losgekoppeld";
+        });
+    </script>
+</body>
+
+</html>
