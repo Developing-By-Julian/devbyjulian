@@ -52,7 +52,7 @@
                 const gamepads = navigator.getGamepads();
                 const mainGamepad = gamepads[1];
                 const secondaryGamepad = gamepads[
-                3
+                0
                 ];
 
                 if (mainGamepad) {
@@ -89,7 +89,7 @@
 
                     if (now - lastShiftTime > currentShiftCooldown) {
                         console.log(joystickValue);
-                        if (joystickValue === 1 && currentGearIndex >= 0 && currentGearIndex < gears.length - 1) {
+                        if (joystickValue === -1 && currentGearIndex >= 0 && currentGearIndex < gears.length - 1) {
                             if (currentGear === "N" && clutchValue < smoothClutchThreshold) {
                                 // Shift up from N to 1 with smooth clutch release
                                 console.log('N - 1');
@@ -102,7 +102,7 @@
                                 document.getElementById("gear-status").textContent = `Versnelling: ${currentGear}`;
                                 lastShiftTime = now; // Update last shift time
                             }
-                        } else if (joystickValue === -1 && currentGearIndex > 0 && clutchValue > 0.9) {
+                        } else if (joystickValue === 1 && currentGearIndex > 0 && clutchValue > 0.9) {
                             // Shift down
                             currentGear = gears[currentGearIndex - 1];
                             document.getElementById("gear-status").textContent = `Versnelling: ${currentGear}`;

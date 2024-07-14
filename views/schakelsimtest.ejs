@@ -29,7 +29,7 @@
     }
 
     function update() {
-        const gp = navigator.getGamepads()[1];
+        const gp = navigator.getGamepads()[0];
         if (gp) {
             for (let i = 0; i < gp.axes.length; i++) {
                 const axisValue = gp.axes[i].toFixed(2);
