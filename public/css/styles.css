@@ -1,28 +1,33 @@
 body {
     padding-top: 56px;
-    background-color: #343a40;
-}
-
-header {
-    background-color: #007bff;
-    color: #fff;
-}
-
-h1, p, label, .btn {
-    color: #f8f9fa;
-}
-
-.container {
-    background-color: #495057;
-    padding: 20px;
-    border-radius: 5px;
-}
-
-.form-control {
-    margin-bottom: 10px;
-}
-
-footer {
-    background-color: #007bff;
-    color: #fff;
-}
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: #ffffff;
+  }
+  
+  .bg-gradient-primary {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: #ffffff;
+  }
+  
+  .navbar-brand, .nav-link, .footer .text-muted {
+    color: #ffffff !important;
+  }
+  
+  .jumbotron {
+    background-color: transparent;
+  }
+  
+  .footer {
+    background-color: #1e3c72;
+  }
+  
+  .btn-primary {
+    background-color: #1e3c72;
+    border-color: #1e3c72;
+  }
+  
+  .btn-primary:hover {
+    background-color: #2a5298;
+    border-color: #2a5298;
+  }
+  
