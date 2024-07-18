@@ -134,7 +134,7 @@ app.post('/contact', (req, res) => {
 
 app.get("/api/status", (req, res) => {
     res.statusMessage = "All services ok";
-    res.status(400).end();
+    res.status(200).end();
 })
 app.listen(port, "0.0.0.0", function () {
     console.log(`Server is running on http://localhost:${port}`);
