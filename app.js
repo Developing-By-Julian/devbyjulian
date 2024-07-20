@@ -132,10 +132,11 @@ app.post('/contact', (req, res) => {
 //     // });
 // })
 
-app.get("/api/status", (req, res) => {
-    res.statusMessage = "All services ok";
-    res.status(200).end();
-})
+app.get('/api/status', (req, res) => {
+    res.status(200).json([
+        { id: 1, name: "Oke!" },
+    ]);
+});
 app.listen(port, "0.0.0.0", function () {
     console.log(`Server is running on http://localhost:${port}`);
 const url = "https://ping.checklyhq.com/b12997ca-8480-4bdb-9ffe-10b25cc3e02b"
