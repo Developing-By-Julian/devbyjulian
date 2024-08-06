@@ -1,33 +1,61 @@
+/* public/css/styles.css */
+
+/* Algemeen stijlen */
 body {
-    padding-top: 56px;
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-    color: #ffffff;
+  font-family: 'Arial', sans-serif;
+  line-height: 1.6;
+}
+
+/* Hero sectie */
+.hero {
+  height: 80vh; /* Verminder de hoogte van de hero sectie */
+  background: url("/images/developer.png") no-repeat center center/cover;
+  color: #fff;
+  display: flex;
+  align-items: center; /* Verticaal centreren */
+  justify-content: center; /* Horizontaal centreren */
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 3rem;
+}
+
+.hero p {
+  font-size: 1.25rem;
+}
+
+.hero .btn {
+  margin-top: 1rem; /* Ruimte tussen tekst en knop */
+}
+
+/* Header en navigatie */
+.navbar {
+  padding: 1rem;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+}
+
+/* Diensten sectie */
+.card-img-top {
+  height: 250px;
+  object-fit: cover;
+}
+
+/* Footer */
+footer {
+  margin-top: 2rem;
+}
+
+/* Aanpassing voor kleinere schermen */
+@media (max-width: 768px) {
+  .hero h1 {
+      font-size: 2rem;
   }
-  
-  .bg-gradient-primary {
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-    color: #ffffff;
+
+  .hero p {
+      font-size: 1rem;
   }
-  
-  .navbar-brand, .nav-link, .footer .text-muted {
-    color: #ffffff !important;
-  }
-  
-  .jumbotron {
-    background-color: transparent;
-  }
-  
-  .footer {
-    background-color: #1e3c72;
-  }
-  
-  .btn-primary {
-    background-color: #1e3c72;
-    border-color: #1e3c72;
-  }
-  
-  .btn-primary:hover {
-    background-color: #2a5298;
-    border-color: #2a5298;
-  }
-  
+}

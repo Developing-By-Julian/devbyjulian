@@ -3,9 +3,7 @@ const bodyParser = require('body-parser');
 const app = express();
 require("dotenv").config()
 const port = process.env.PORT || 3080;
-
-// Set EJS as templating engine
-app.set('view engine', 'ejs');
+const path = require("node:path")
 
 // Middleware
 app.use(bodyParser.json());
@@ -13,19 +11,27 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 // Routes
-app.get('/', (req, res) => {
-    res.render('pages/index', { title: 'Home' });
-});
-app.get("/about", (req, res) => {
-    res.render('pages/about', { title: 'About' });
 
-})
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// Stel de statische bestanden in (CSS, JS, afbeeldingen)
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Route voor de homepage
+app.get('/', (req, res) => {
+    res.render('index');
+});
+
+// Route voor de contactpagina
 app.get('/contact', (req, res) => {
-    res.render('pages/contact', { title: 'Contact' });
+    res.render('contact');
 });
-app.get('/services', (req, res) => {
-    res.render('pages/services', { title: 'Services' });
+app.get('/regels', (req, res) => {
+    res.render('regels');
 });
+
+
 app.get('/projecten', (req, res) => {
     res.render('portfolio/projects');
 });
@@ -51,7 +57,7 @@ app.post('/contact', (req, res) => {
         subject: `${name} - ${email}`,
         text: message,
         headers: {
-            'Reply-To': email
+            'Reply-To': "reply@developingbyjulian.nl"
         }
     };
 
@@ -139,6 +145,7 @@ app.get('/api/status', (req, res) => {
 });
 app.listen(port, "0.0.0.0", function () {
     console.log(`Server is running on http://localhost:${port}`);
-const url = "https://ping.checklyhq.com/b12997ca-8480-4bdb-9ffe-10b25cc3e02b"
-fetch(url).then(response => console.log(response))
 });
+
+let client = require("./bot/bot")
+client.login(process.env.TOKEN)
