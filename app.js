@@ -143,9 +143,50 @@ app.get('/api/status', (req, res) => {
         { id: 1, name: "Oke!" },
     ]);
 });
+
+app.get("/winkel", async (req, res) => {
+    res.render("winke")
+})
+const paypal = require('@paypal/checkout-server-sdk');
+
+const clientId = process.env.PAYPAL_CLIENT_ID
+const clientSecret = process.env.PAYPAL_CLIENT_SEC
+
+const environment = new paypal.core.LiveEnvironment(clientId, clientSecret);
+const client = new paypal.core.PayPalHttpClient(environment);
+
+app.post('/create-paypal-order', async (req, res) => {
+    const { cart } = req.body;
+    const amount = cart.reduce((total, item) => total + item.price, 0).toFixed(2);
+
+    const request = new paypal.orders.OrdersCreateRequest();
+    request.prefer('return=representation');
+    request.requestBody({
+        intent: 'CAPTURE',
+        purchase_units: [{
+            amount: {
+                currency_code: 'EUR',
+                value: amount,
+            },
+        }],
+    });
+
+    try {
+        const order = await client.execute(request);
+        res.json({
+            id: order.result.id,
+            approveUrl: order.result.links.find(link => link.rel === 'approve').href,
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Fout bij het aanmaken van de PayPal bestelling' });
+    }
+});
+
+
+
 app.listen(port, "0.0.0.0", function () {
     console.log(`Server is running on http://localhost:${port}`);
 });
-
-let client = require("./bot/bot")
-client.login(process.env.TOKEN)
+let botclient = require("./bot/bot")
+botclient.login(process.env.TOKEN)

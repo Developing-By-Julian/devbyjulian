@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Winkelwagentje</title>
+    <!-- Bootstrap CSS via CDN -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Eigen CSS -->
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body {
+            padding-top: 56px; /* ruimte voor de fixed navbar */
+        }
+        .card-header {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-custom {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-custom:hover {
+            background-color: #0056b3;
+        }
+        .pricing-card {
+            margin-bottom: 20px;
+        }
+        .hero {
+            background-color: #f8f9fa;
+            padding: 60px 0;
+            text-align: center;
+        }
+        .hero-content h1 {
+            font-size: 3rem;
+        }
+        .hero-content p {
+            font-size: 1.25rem;
+        }
+        .footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header met navigatie -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+            <a class="navbar-brand" href="/">DevelopingByJulian</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#winkel">Winkel</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hoofdgedeelte -->
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="display-4">Onze Pakketten</h1>
+                </div>
+            </div>
+        </section>
+
+        <section id="winkel" class="container mt-5">
+            <div class="row">
+                <!-- Website Package -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card pricing-card">
+                        <div class="card-header">
+                            Website
+                        </div>
+                        <div class="card-body">
+                            <h2>€15</h2>
+                            <p>Eenmalige Betaling via PayPal</p>
+                            <button class="btn btn-custom" onclick="addToCart('Website', 15)">Toevoegen aan Winkelwagentje</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Discord Bot Package -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card pricing-card">
+                        <div class="card-header">
+                            Discord Bot
+                        </div>
+                        <div class="card-body">
+                            <h2>€10</h2>
+                            <p>Eenmalige Betaling via PayPal</p>
+                            <button class="btn btn-custom" onclick="addToCart('Discord Bot', 10)">Toevoegen aan Winkelwagentje</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hosting Package -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card pricing-card">
+                        <div class="card-header">
+                            Hosting
+                        </div>
+                        <div class="card-body">
+                            <h2>€2 Per Maand</h2>
+                            <p>Of €22 Per Jaar</p>
+                            <p>Maandelijkse of jaarlijkse betaling via PayPal</p>
+                            <button class="btn btn-custom" onclick="addToCart('Hosting (Maandelijks)', 2)">Toevoegen (Maandelijks)</button>
+                            <button class="btn btn-custom mt-2" onclick="addToCart('Hosting (Jaarlijks)', 22)">Toevoegen (Jaarlijks)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Package -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card pricing-card">
+                        <div class="card-header">
+                            Dashboard
+                        </div>
+                        <div class="card-body">
+                            <h2>€5</h2>
+                            <p>Eenmalige Betaling via PayPal</p>
+                            <button class="btn btn-custom" onclick="addToCart('Dashboard', 5)">Toevoegen aan Winkelwagentje</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="my-4">Winkelwagentje</h2>
+            <ul class="list-group mb-3" id="cart"></ul>
+            <button class="btn btn-custom" onclick="checkout()">Afrekenen met PayPal</button>
+            <p>ZORG DAT JE IN DE <a href="https://discord.gg/RBTrJe2Any">DISCORD</a> ZIT EN TAG JULIANRJC3 MET BEWIJS VAN AFREKENEN </p>
+        </section>
+    </main>
+
+    <br>
+    <hr>
+    <br>
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 DevelopingByJulian. Alle rechten voorbehouden.</p>
+    </footer>
+
+    <!-- Bootstrap JS en dependencies via CDN -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        let cart = [];
+
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            updateCartDisplay();
+        }
+
+        function updateCartDisplay() {
+            const cartList = document.getElementById('cart');
+            cartList.innerHTML = '';
+            cart.forEach(item => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item';
+                li.textContent = `${item.name} - €${item.price}`;
+                cartList.appendChild(li);
+            });
+        }
+
+        function checkout() {
+            fetch('/create-paypal-order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ cart }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.id) {
+                    window.location.href = data.approveUrl;
+                } else {
+                    alert('Er is een fout opgetreden bij het aanmaken van de PayPal bestelling.');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
