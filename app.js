@@ -20,7 +20,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Route voor de homepage
 app.get('/', (req, res) => {
-    res.sendFile("./index.html")
+    res.render("index")
 });
 
 // Route voor de contactpagina
