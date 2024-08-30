@@ -188,5 +188,5 @@ app.post('/create-paypal-order', async (req, res) => {
 app.listen(port, "0.0.0.0", function () {
     console.log(`Server is running on http://localhost:${port}`);
 });
-let botclient = require("./bot/bot")
-botclient.login(process.env.TOKEN)
+// let botclient = require("./bot/bot")
+// botclient.login(process.env.TOKEN)
